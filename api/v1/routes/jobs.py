@@ -317,9 +317,10 @@ async def create_bookmark(
             "data": {}
         }
     except Exception as e:
+        logger.error(f"An unexpected error occurred: {e}", exc_info=True)
         return {
         "status": "failure",
-        "message": str(e),
+        "message": "An internal error has occurred. Please try again later.",
         "status_code": 500,
         "data": {}
     }
