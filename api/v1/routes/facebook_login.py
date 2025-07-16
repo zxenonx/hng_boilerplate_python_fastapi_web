@@ -56,4 +56,6 @@ async def facebook_login(request: OAuthToken, db: Annotated[Session, Depends(get
         )
         return response
     except Exception as e:
-        return {"status_code": 500, "message": str(e)}
+        import logging
+        logging.error("An error occurred during Facebook login", exc_info=True)
+        return {"status_code": 500, "message": "An internal server error occurred. Please try again later."}
