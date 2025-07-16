@@ -30,7 +30,14 @@ async def facebook_login(request: OAuthToken, db: Annotated[Session, Depends(get
         try:
             fb_user_id = fb_user_service.validate_facebook_token(access_token)
         except Exception as e:
-            return e
+            import logging
+            logging.error("Error validating Facebook token", exc_info=True)
+            response = JsonResponseDict(
+                message="An error occurred while validating the access token. Please try again later.",
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                error=COULD_NOT_VALIDATE_CRED,
+            )
+            return response
         if not fb_user_id:
             response = JsonResponseDict(
                 message="Invalid access token",
